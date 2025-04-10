@@ -11,7 +11,8 @@ from cogs.general import GeneralCog
 from cogs.logging import LoggingCog
 from cogs.mentor import MentorCog
 
-
+def start_bot():
+    DiscordBot()
 
 
 class DiscordBot(commands.Bot):
@@ -29,11 +30,7 @@ class DiscordBot(commands.Bot):
                          intents=intents,
                          description=description)
         
-        db_url = os.getenv("DB_URL")
-        # TODO Needs to create PostgreSQL database
-        #self.db_pool = asyncpg.create_pool(dsn=db_url)
-        #self.db_pool = self.loop.run_until_complete(self.db_pool)
-
+        self.db_pool = None
         self.run(os.getenv("BOT_TOKEN"))
 
     async def setup_hook(self):
@@ -41,6 +38,18 @@ class DiscordBot(commands.Bot):
         await self.add_cog(GamesCog(self))
         #self.add_cog(LoggingCog(self, self.db_pool))
         #self.add_cog(MentorCog(self, self.db_pool))
+
+        db_url = os.getenv("DB_URL")
+        if db_url:
+            print(f"Attempting to connect to database")
+            try:
+                self.db_pool = await asyncpg.create_pool(dsn=db_url)
+                print("Database connection successful.")
+            except OSError as e:
+                print(f"Failed to connect to the database. Error: {e}")
+                self.db_pool = None
+        else:
+            print("No DB_URL found. Skipping database connection.")
 
     async def on_ready(self):
         print(f"Logged in as {self.user} (ID: {self.user.id})")
