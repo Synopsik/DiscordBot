@@ -1,5 +1,4 @@
 import os
-from utilities.database_utils import list_tables_and_columns
 import asyncpg
 from discord.ext import commands
 import discord
@@ -10,6 +9,7 @@ from cogs.games import GamesCog
 from cogs.general import GeneralCog
 from cogs.logging import LoggingCog
 from cogs.mentor import MentorCog
+
 
 def start_bot():
     DiscordBot()
@@ -47,8 +47,10 @@ class DiscordBot(commands.Bot):
 
         await self.add_cog(GeneralCog(self))
         await self.add_cog(GamesCog(self))
-        await self.add_cog(LoggingCog(self, self.db_pool))
-        #await self.add_cog(MentorCog(self, self.db_pool))
+        if self.db_pool is not None:
+            await self.add_cog(LoggingCog(self, self.db_pool))
+            # Still need to update the MentorCog
+            #await self.add_cog(MentorCog(self, self.db_pool))
     async def on_ready(self):
         print(f"Logged in as {self.user} (ID: {self.user.id})")
 

@@ -1,5 +1,3 @@
-# database_utils.py
-
 import asyncpg
 
 
