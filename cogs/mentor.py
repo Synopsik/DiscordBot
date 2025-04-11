@@ -1,6 +1,7 @@
 import sqlite3
 import discord
 from discord.ext import commands
+from cogs.logging import get_time
 
 class MentorCog(commands.Cog, name="Mentor"):
     def __init__(self, bot, conn):
@@ -16,7 +17,7 @@ class MentorCog(commands.Cog, name="Mentor"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Mentor Cog Ready")
+        print(f"[{await get_time()}] [INITIALIZED] Mentor Cog")
 
     @commands.command(name="add_mentor")
     async def add_mentor(self, ctx, member: discord.Member, skills: str):

@@ -1,5 +1,6 @@
 import random
 from discord.ext import commands
+from cogs.logging import get_time
 
 class GamesCog(commands.Cog, name="Games"):
     def __init__(self, bot):
@@ -7,7 +8,7 @@ class GamesCog(commands.Cog, name="Games"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Games Cog Ready")
+        print(f"[{await get_time()}] [EVENT] Loaded Games Cog")
 
     @commands.command(name="coinflip")
     @commands.cooldown(1, 5, commands.BucketType.user)

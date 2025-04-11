@@ -1,4 +1,5 @@
 from discord.ext import commands
+from cogs.logging import get_time
 
 class GeneralCog(commands.Cog, name="General"):
     def __init__(self, bot):
@@ -6,7 +7,7 @@ class GeneralCog(commands.Cog, name="General"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print("Mentor Cog Ready")
+        print(f"[{await get_time()}] [INITIALIZED] Loaded General Cog")
 
     @commands.command(name="ping")
     async def ping(self, ctx):
