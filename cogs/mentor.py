@@ -14,6 +14,10 @@ class MentorCog(commands.Cog, name="Mentor"):
                             )""")
         conn.commit()
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Mentor Cog Ready")
+
     @commands.command(name="add_mentor")
     async def add_mentor(self, ctx, member: discord.Member, skills: str):
         self.curr.execute("INSERT OR REPLACE INTO mentors VALUES (?, ?, ?)",

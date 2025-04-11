@@ -4,6 +4,10 @@ class GeneralCog(commands.Cog, name="General"):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Mentor Cog Ready")
+
     @commands.command(name="ping")
     async def ping(self, ctx):
         await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms")

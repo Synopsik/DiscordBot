@@ -5,6 +5,10 @@ class GamesCog(commands.Cog, name="Games"):
     def __init__(self, bot):
         self.bot = bot
 
+    @commands.Cog.listener()
+    async def on_ready(self):
+        print("Games Cog Ready")
+
     @commands.command(name="coinflip")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def coinflip(self, ctx):
