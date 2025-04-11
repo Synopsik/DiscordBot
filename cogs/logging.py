@@ -1,6 +1,6 @@
 import datetime
 from discord.ext import commands
-from utilities.database_utils import list_tables_and_columns, init_db_tables
+from utilities.database_utils import list_tables_and_columns, init_db_tables, update_single_user
 
 class LoggingCog(commands.Cog, name="Logging"):
     def __init__(self, bot, conn):
@@ -11,6 +11,7 @@ class LoggingCog(commands.Cog, name="Logging"):
     async def on_ready(self):
         print("Log Cog Ready")
         await init_db_tables(self.db_pool)
+        await update_single_user(self.db_pool, 1, "test")
         await list_tables_and_columns(self.db_pool)
 
     @commands.Cog.listener()

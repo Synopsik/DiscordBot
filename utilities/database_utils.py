@@ -1,126 +1,154 @@
+# database_utils.py
+
 import asyncpg
 
 
-async def init_db_tables(db_pool):
+async def init_db_tables(db_pool: asyncpg.Pool) -> None:
     """
-    Initializes all necessary DB tables if they do not already exist,
-    using a dedicated schema (bot_schema). Make sure the database user
-    has privileges to create and use this schema.
+    Initializes or migrates necessary tables in the database.
     """
-    create_schema_query = """
-        CREATE SCHEMA IF NOT EXISTS bot_schema;
-    """
-
-    create_table_queries = [
-        """
-        CREATE TABLE IF NOT EXISTS bot_schema.guilds (
-            guild_id BIGINT PRIMARY KEY,
-            guild_name TEXT
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS bot_schema.users (
-            user_id BIGINT NOT NULL,
-            guild_id BIGINT NOT NULL,
-            user_name TEXT,
-            PRIMARY KEY (user_id, guild_id),
-            FOREIGN KEY (guild_id)
-                REFERENCES bot_schema.guilds (guild_id)
-                ON DELETE CASCADE
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS bot_schema.messages (
-            message_id BIGSERIAL PRIMARY KEY,
-            user_id BIGINT NOT NULL,
-            guild_id BIGINT NOT NULL,
-            content TEXT,
-            timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-            FOREIGN KEY (guild_id, user_id)
-                REFERENCES bot_schema.users (guild_id, user_id)
-                ON DELETE CASCADE
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS bot_schema.logs (
-            log_id BIGSERIAL PRIMARY KEY,
-            guild_id BIGINT NOT NULL,
-            user_id BIGINT,
-            event_type TEXT,
-            event_timestamp TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-            FOREIGN KEY (guild_id, user_id)
-                REFERENCES bot_schema.users (guild_id, user_id)
-                ON DELETE CASCADE
-        );
-        """,
-        """
-        CREATE TABLE IF NOT EXISTS bot_schema.mentors (
-            mentor_id BIGSERIAL PRIMARY KEY,
-            guild_id BIGINT,
-            user_id BIGINT,
-            skill TEXT,
-            contact TEXT,
-            FOREIGN KEY (guild_id, user_id)
-                REFERENCES bot_schema.users (guild_id, user_id)
-                ON DELETE CASCADE
-        );
-        """
-    ]
     async with db_pool.acquire() as conn:
-        # Create the new schema if not present
-        await conn.execute(create_schema_query)
-        # Now create the tables within our dedicated schema
-        for query in create_table_queries:
-            await conn.execute(query)
+        # Example: Create a 'users' table if it doesn't exist
+        create_users_table_query = """
+            CREATE TABLE IF NOT EXISTS users (
+                id         SERIAL PRIMARY KEY,
+                discord_id BIGINT UNIQUE NOT NULL,
+                username   TEXT NOT NULL,
+                created_at TIMESTAMP DEFAULT NOW()
+            );
+        """
+        await conn.execute(create_users_table_query)
+
+        # Example: Create a 'logs' table if it doesn't exist
+        create_logs_table_query = """
+            CREATE TABLE IF NOT EXISTS logs (
+                log_id     SERIAL PRIMARY KEY,
+                user_id    BIGINT NOT NULL,
+                command    TEXT,
+                timestamp  TIMESTAMP DEFAULT NOW()
+            );
+        """
+        await conn.execute(create_logs_table_query)
+
+        print("[DB] Tables verified or created successfully.")
 
 
-async def list_tables_and_columns(bot):
+async def list_tables_and_columns(db_pool: asyncpg.Pool) -> None:
     """
-    Lists the tables and their columns exclusively within 'bot_schema'.
+    Lists tables and their columns in the connected database, and prints up to
+    the first 10 entries from each table.
     """
-    query_tables = """
-        SELECT table_name
-        FROM information_schema.tables
-        WHERE table_schema = 'bot_schema';
+    async with db_pool.acquire() as conn:
+        # Fetch table names
+        get_tables_query = """
+            SELECT table_name
+            FROM information_schema.tables
+            WHERE table_schema = 'public'
+            ORDER BY table_name;
+        """
+        tables = await conn.fetch(get_tables_query)
+        if not tables:
+            print("[DB] No tables found in the database.")
+            return
+
+        for table in tables:
+            table_name = table["table_name"]
+            print(f"\n-- Table: {table_name} --")
+
+            # Fetch columns for each table
+            get_columns_query = """
+                SELECT column_name, data_type
+                FROM information_schema.columns
+                WHERE table_name = $1
+                ORDER BY ordinal_position;
+            """
+            columns = await conn.fetch(get_columns_query, table_name)
+            for col in columns:
+                print(f"  Column: {col['column_name']} | Type: {col['data_type']}")
+
+            # Fetch first 10 rows for a quick preview
+            fetch_limited_rows_query = f"SELECT * FROM {table_name} LIMIT 10;"
+            rows = await conn.fetch(fetch_limited_rows_query)
+            if not rows:
+                print("  (No entries in this table.)")
+            else:
+                print("  First 10 entries:")
+                for row in rows:
+                    print(f"    {row}")
+
+
+async def bulk_update_users(db_pool: asyncpg.Pool, user_data: list) -> None:
     """
-    query_columns = """
-        SELECT column_name
-        FROM information_schema.columns
-        WHERE table_schema = 'bot_schema'
-          AND table_name = $1;
+    Performs a bulk update or insert of user data.
+    'user_data' should be a list of dictionaries or tuples with the necessary fields.
+
+    Example structure of user_data (list of dict):
+        [
+            {"discord_id": 123456789, "username": "ExampleUser1"},
+            {"discord_id": 987654321, "username": "ExampleUser2"},
+            ...
+        ]
     """
-    async with bot.acquire() as conn:
-        table_records = await conn.fetch(query_tables)
-        tables_and_columns = {}
-        for record in table_records:
-            table_name = record["table_name"]
-            column_records = await conn.fetch(query_columns, table_name)
-            columns = [row["column_name"] for row in column_records]
-            tables_and_columns[table_name] = columns
-    print(f"Current tables and columns in 'bot_schema':\n[Guilds]{tables_and_columns["guilds"]}\n"
-                                                        f"[Users]{tables_and_columns["users"]}")
-    return tables_and_columns
+    async with db_pool.acquire() as conn:
+        # Example upsert operation to handle existing & new users
+        upsert_query = """
+            INSERT INTO users (discord_id, username)
+            VALUES ($1, $2)
+            ON CONFLICT (discord_id) 
+            DO UPDATE SET username = EXCLUDED.username
+        """
+        async with conn.transaction():
+            for record in user_data:
+                await conn.execute(
+                    upsert_query,
+                    record["discord_id"],
+                    record["username"]
+                )
+    print("[DB] Bulk user update completed.")
 
 
-async def fetch_one(bot, query: str, *params):
-    async with bot.acquire() as connection:
-        record = await connection.fetchrow(query, *params)
-    return record
+async def update_single_user(db_pool: asyncpg.Pool, discord_id: int, username: str) -> None:
+    """
+    Updates a single user's record (or inserts if not present).
+    """
+    async with db_pool.acquire() as conn:
+        upsert_query = """
+            INSERT INTO users (discord_id, username)
+            VALUES ($1, $2)
+            ON CONFLICT (discord_id) 
+            DO UPDATE SET username = EXCLUDED.username
+        """
+        await conn.execute(upsert_query, discord_id, username)
+    print(f"[DB] User {discord_id} updated/inserted successfully.")
 
 
-async def fetch_all(bot, query: str, *params):
-    async with bot.acquire() as connection:
-        records = await connection.fetch(query, *params)
-    return records
+async def fetch_one(db_pool: asyncpg.Pool, query: str, *args):
+    """
+    Fetches a single row from the database.
+    """
+    async with db_pool.acquire() as conn:
+        return await conn.fetchrow(query, *args)
 
 
-async def execute(bot, query: str, *params):
-    async with bot.acquire() as connection:
-        result = await connection.execute(query, *params)
-    return result
+async def fetch_all(db_pool: asyncpg.Pool, query: str, *args):
+    """
+    Fetches all rows matching the query.
+    """
+    async with db_pool.acquire() as conn:
+        return await conn.fetch(query, *args)
 
 
-async def fetch_val(bot, query: str, *params):
-    async with bot.acquire() as connection:
-        value = await connection.fetchval(query, *params)
-    return value
+async def fetch_val(db_pool: asyncpg.Pool, query: str, *args):
+    """
+    Fetches a single value (the first column of the first row) from the database.
+    """
+    async with db_pool.acquire() as conn:
+        return await conn.fetchval(query, *args)
+
+
+async def execute(db_pool: asyncpg.Pool, query: str, *args) -> None:
+    """
+    Executes a generic statement in the database (INSERT, UPDATE, DELETE, etc.).
+    """
+    async with db_pool.acquire() as conn:
+        await conn.execute(query, *args)
