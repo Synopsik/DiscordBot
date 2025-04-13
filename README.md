@@ -34,7 +34,7 @@ Instructions to run a Discord bot from a single file
 
 3. Create a virtual environment to hold our libraries `python -m venv bot-env`
 
-4. Enter virtual environment `source bot-env/bin/activate`
+4. Enter virtual environment `.\bot-env\Scripts\activate` on Windows, `source bot-env/bin/activate` on Linux  
 
 5. Install libraries `pip install -U discord.py, python-dotenv`
 > [!Note]
@@ -42,7 +42,10 @@ Instructions to run a Discord bot from a single file
 
 ### Develop Project
 
-1. Import necessary libraries, after importing the function load_dotenv() we need to call it, os is used to access our .env variables
+1. Create project file ../Projects/DiscordBot/main_simple.py
+
+
+2. Import necessary libraries, after importing the function load_dotenv() we need to call it, os is used to access our .env variables with dotenv
 ```
 import discord
 import os
@@ -50,7 +53,7 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-2. Create an intents objects configuration file and set the permissions for channels you need, then you can instantiate your bot
+3. Create an intents objects configuration file and set the permissions for channels you need, then you can instantiate your bot
 ```
 intents = discord.Intents.default()
 intents.presences = True # Allows the bot to view user presence (e.g., online/offline status)
@@ -61,7 +64,7 @@ intents.message_content = True # Gives the bot access to read message content, s
 client = discord.Client(intents=intents)
 ```
 
-3. Create an override function with the decorator `@client.event`, this triggers anytime a message is posted on the server or sent directly to the bot
+4. Create an override function with the decorator `@client.event`, this triggers anytime a message is posted on the server or sent directly to the bot
 ```
 @client.event
 async def on_message(message):
@@ -85,8 +88,10 @@ Once we validated that the message is not our own, we can use a case match state
             print(f"[MESSAGE] {message.author}: {message.content}")
 ```
 
-4. Finally, the most important step we need to do is run our bot
+5. Finally, the most important step we need to do is run our bot
 ```
 # Run our bot once it is configured
 client.run(token)
 ```
+
+See `main_simple.py` for the entire file
