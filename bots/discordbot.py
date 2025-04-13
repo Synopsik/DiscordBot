@@ -2,9 +2,8 @@ import os
 from typing import Mapping
 
 import asyncpg
-from discord.ext import commands
 import discord
-from discord.ext.commands import Cog
+from discord.ext import commands
 from dotenv import load_dotenv
 load_dotenv()
 

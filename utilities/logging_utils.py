@@ -5,6 +5,40 @@ from typing import Optional
 
 import utilities.database_utils as database_utils
 
+def setup_logging(
+        db_pool,
+        loop: asyncio.AbstractEventLoop,
+        logger_name: Optional[str] = None,
+        level: int = logging.INFO,
+        table_name: str = "logs"
+) -> logging.Logger:
+    """
+    Configures and returns a Python logger that uses the DatabaseLogHandler.
+    - db_pool: The asyncpg Pool for database interactions.
+    - loop: The event loop used for scheduling async DB calls.
+    - logger_name: Optional name for the logger (defaults to root logger if None).
+    - level: Logging level (DEBUG, INFO, etc.).
+    - table_name: Which DB table to store logs in (default 'logs').
+    """
+    if logger_name:
+        logger = logging.getLogger(logger_name)
+    else:
+        logger = logging.getLogger()
+
+    logger.setLevel(level)
+
+    # Create and add our custom handler
+    db_handler = DatabaseLogHandler(db_pool=db_pool, loop=loop, table_name=table_name)
+    # You could also attach additional formatters here:
+    formatter = logging.Formatter(
+        fmt="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
+        datefmt="%Y-%m-%d %H:%M:%S"
+    )
+    db_handler.setFormatter(formatter)
+    logger.addHandler(db_handler)
+
+    return logger
+
 
 class DatabaseLogHandler(logging.Handler):
     """
@@ -59,36 +93,3 @@ class DatabaseLogHandler(logging.Handler):
         )
 
 
-def setup_logging(
-        db_pool,
-        loop: asyncio.AbstractEventLoop,
-        logger_name: Optional[str] = None,
-        level: int = logging.INFO,
-        table_name: str = "logs"
-) -> logging.Logger:
-    """
-    Configures and returns a Python logger that uses the DatabaseLogHandler.
-    - db_pool: The asyncpg Pool for database interactions.
-    - loop: The event loop used for scheduling async DB calls.
-    - logger_name: Optional name for the logger (defaults to root logger if None).
-    - level: Logging level (DEBUG, INFO, etc.).
-    - table_name: Which DB table to store logs in (default 'logs').
-    """
-    if logger_name:
-        logger = logging.getLogger(logger_name)
-    else:
-        logger = logging.getLogger()
-
-    logger.setLevel(level)
-
-    # Create and add our custom handler
-    db_handler = DatabaseLogHandler(db_pool=db_pool, loop=loop, table_name=table_name)
-    # You could also attach additional formatters here:
-    formatter = logging.Formatter(
-        fmt="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
-        datefmt="%Y-%m-%d %H:%M:%S"
-    )
-    db_handler.setFormatter(formatter)
-    logger.addHandler(db_handler)
-
-    return logger
