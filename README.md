@@ -2,17 +2,15 @@
 
 Run either
 
-> through the main.py file
+1. through the main.py file
 
 or
 
-> through the main_simple.py file
+2. through the main_simple.py file
 
 or    
 
-> through a python console,
-> 
-> instantiate DiscordBot() on its own from bots/discordbots.py or store into a var `bot = DiscordBot()`
+3. through a python console, instantiate DiscordBot() on its own from bots/discordbots.py or store into a var `bot = DiscordBot()`
 
 ## Simple Bot Instructions
 
@@ -120,6 +118,8 @@ A cog is a class that inheirits `from discord.ext import commands` using `(comma
 
 For example, we can have a bot connected to multiple Discord servers. Based on the name of the server, or some other determining factor, after the bot init's it is able to load specific cogs. One server could have general, games, mentor while another server could have general, music, agent.
 
+---
+
 ### Setup Project
 
 1. If not already completed, finish **Get Discord Token** steps, and **Setup Project** instructions steps from Simple Bot
@@ -169,6 +169,7 @@ class DiscordBot(commands.Bot):
 ```
   def __init__(self, *cogs):
     self.cogs_list = cogs
+
     # Configure intents here
     intents = discord.Intents.default()
     intents.presences = True
