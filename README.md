@@ -118,7 +118,7 @@ Instead of running everything from a single file that we endlessly scroll throug
 
 A cog is a class that inheirits `from discord.ext import commands` using `(commands.Cog, name="CogName")` for the parameters, inside this class we have overridable methods that have a context variable that can be used to pull information from the message recieved, the message author, and more context information. Using cogs we can seperate logic into interchangeable pieces that can be loaded and unloaded as needed.
 
-For example, we can have a bot connected to multiple Discord servers. Based on the name of the server, or some other determining factor, when the bot loads it is able to load specific cogs. One server could have general, games, mentor while another server could have general, games, music, agent
+For example, we can have a bot connected to multiple Discord servers. Based on the name of the server, or some other determining factor, after the bot init's it is able to load specific cogs. One server could have general, games, mentor while another server could have general, music, agent.
 
 ### Setup Project
 
