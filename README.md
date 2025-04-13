@@ -2,47 +2,49 @@
 
 Run either
 
-1. through the main.py file
+1. Through the main.py file
 
-or
+Or
 
-2. through the main_simple.py file
+2. Through the main_simple.py file
 
-or    
+Or    
 
-3. through a python console, instantiate DiscordBot() on its own from bots/discordbots.py or store into a var `bot = DiscordBot()`
+3. Through a python console, instantiate DiscordBot() on its own from bots/discordbots.py or store into a var `bot = DiscordBot()`
 
 ## Simple Bot Instructions
 
 Instructions to run a Discord bot from a single file
 
-Example: main_simple.py
+Example file: main_simple.py
 
 ### Get Discord Token
 
 1. Login to Discord and create a private server
 
-1. Follow [this link](https://discordpy.readthedocs.io/en/stable/discord.html) to create a bot account and get your token
+2. Follow [this link](https://discordpy.readthedocs.io/en/stable/discord.html) to create a bot account and get your token
   
 3. Invite it to your server
 
 ### Setup Project
 
-1. Create a new project directory ..\Projects\DiscordBot\
+4. Create a new project directory ..\Projects\DiscordBot\
 
-2. Shift+Right Click inside the new folder and select `Open PowerShell` (or Open a terminal and move to directory `cd ..\Projects\DiscordBot\`)
+5. * Shift+Right Click inside the new folder 
+   * Select `Open PowerShell` 
+   * (or Open a terminal and `cd ..\Projects\DiscordBot\`)
 
-3. Create a virtual environment to hold our libraries `python -m venv bot-env`
+6. Create a virtual environment to hold our libraries `python -m venv bot-env`
 
-4. Enter virtual environment `.\bot-env\Scripts\activate` on Windows, `source bot-env/bin/activate` on Linux  
+7. Enter virtual environment `.\bot-env\Scripts\activate` on Windows, `source bot-env/bin/activate` on Linux  
 
-5. Install libraries `pip install -U discord.py, python-dotenv`
+8. Install libraries `pip install -U discord.py, python-dotenv`
 > [!Note]
 > discord.py is used to operate bot
 > 
 > python-dotenv is used to interact with .env files
 
-6. Create environment file through text editor, save as all files and name it .env
+9. Create environment file through text editor, save as all files and name it .env
 ```
 # example .env file
 BOT_TOKEN="TOKEN_EXAMPLE_CODE"
@@ -50,10 +52,12 @@ BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 
 ### Develop Project
 
-1. Create project file ..\Projects\DiscordBot\main_simple.py
+10. Create project file ..\Projects\DiscordBot\main_simple.py
 
 
-2. Import necessary libraries, after importing the function load_dotenv() we need to call it, os is used to access our .env variables with dotenv
+11. * Import necessary libraries
+    * After importing the function load_dotenv() we need to call it
+    * os is used to access our .env variables with dotenv
 ```
 import discord
 import os
@@ -61,7 +65,8 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-3. Create an intents object configuration file and set the permissions for channels you need, then you can instantiate your bot
+12. * Create an intents object configuration file and set the permissions for channels you need
+    * Then you can instantiate your bot
 ```
 intents = discord.Intents.default()
 intents.presences = True # Allows the bot to view user presence (e.g., online/offline status)
@@ -72,7 +77,7 @@ intents.message_content = True # Gives the bot access to read message content, s
 client = discord.Client(intents=intents)
 ```
 
-4. Store token information from environment variable
+13. Store token information from environment variable
 ```
 # Setup token from environment,
 # Alternatively this can be hardcoded
@@ -80,7 +85,8 @@ client = discord.Client(intents=intents)
 token = os.getenv("BOT_TOKEN")
 ```
 
-5. Create an override function `on_message(message)` with the decorator `@client.event`, this triggers anytime a message is posted on the server or sent directly to the bot
+14. * Create an override function `on_message(message)` with the decorator `@client.event`
+    * This triggers anytime a message is posted on the server or sent directly to the bot
 ```
 @client.event
 async def on_message(message):
@@ -90,7 +96,7 @@ async def on_message(message):
         return
 ```
 
-Once we validated that the message is not our own, we can use a case match statement to look for simple commands and process messages
+* Once we validated that the message is not our own, we can use a case match statement to look for simple commands and process messages
 ```
 # Begin case statement to search for bot commands
     match message.content:
@@ -104,7 +110,7 @@ Once we validated that the message is not our own, we can use a case match state
             print(f"[MESSAGE] {message.author}: {message.content}")
 ```
 
-6. Finally, the most important step we need to do is run our bot
+15. Finally, the most important step we need to do is run our bot
 ```
 # Run our bot once it is configured
 client.run(token)
@@ -119,6 +125,8 @@ Instead of running everything from a single file that we endlessly scroll throug
 A cog is a class that inherits `from discord.ext import commands` using `(commands.Cog, name="CogName")` for the parameters, inside this class we have overridable methods that have a context variable that can be used to pull information from the message received, the message author, and more context information. Using cogs we can separate logic into interchangeable pieces that can be loaded and unloaded as needed.
 
 For example, we can have a bot connected to multiple Discord servers. Based on the name of the server, or some other determining factor, after the bot init's it is able to load specific cogs. One server could have general, games, mentor while another server could have general, music, agent.
+
+Example file: main.py
 
 ---
 
@@ -148,14 +156,14 @@ DiscordBot
     └── .env # Stores important keys that we want hidden from version control
 ```
 > [!Note]
->
 > For now, only files and folders with a `*` prefix need to be created
 
 ### Develop Project
 
 The core of our project can be found within our `discordbot.py` file
 
-1. Import the same libraries as before, adding one more import for a specific class to inherit from
+3. * Import the same libraries as before
+   * Additionally, we use `commands` so that our class can inherit directly from `commands.Bot`
 ```
 import discord
 from discord.ext import commands
@@ -163,12 +171,15 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-2. Create our Discord bot class, inherits from the Bot class in commands
+4. Create our Discord bot class, using our inherited `commands.Bot` as the Parent class
 ```
 class DiscordBot(commands.Bot):
 ```
 
-3. Set up init method to store important variables. We pass cogs as an optional argument that can hold an indefinite amount of values. We then configure the intents and other default config info to pass to the \_\_init__ method of the parent class. Once the class object is instantiated, we use the built-in run method to start our bot.
+5. * Set up init method to store important variables.  
+   * We pass cogs as an optional argument that can hold an indefinite amount of values. 
+   * We then configure the intents and other default config info to pass to the \_\_init__ method of the parent class. 
+   * After we run the init method of the Bot parent class, we use the built-in run method to start our bot.
 ```
   def __init__(self, *cogs):
     self.cogs_list = cogs
