@@ -61,7 +61,7 @@ from dotenv import load_dotenv
 load_dotenv()
 ```
 
-3. Create an intents objects configuration file and set the permissions for channels you need, then you can instantiate your bot
+3. Create an intents object configuration file and set the permissions for channels you need, then you can instantiate your bot
 ```
 intents = discord.Intents.default()
 intents.presences = True # Allows the bot to view user presence (e.g., online/offline status)
@@ -114,9 +114,9 @@ See `main_simple.py` for the entire file
 
 ## Advanced Bot Instructions
 
-Instead of running everything from a single file that we endlessly scroll through to find a line to work on, we break everything up into meaningful classes that have their dedicated jobs, or **cogs**.
+Instead of running everything from a single file that we endlessly scroll through to find a line to work on, we break our program up into meaningful classes that have their dedicated jobs, or **cogs**.
 
-A cog is a class that inheirits `from discord.ext import commands` using `(commands.Cog, name="Name")` for the parameters, inside this class we have overridable methods that have a context variable that can be used to pull information from the message recieved, the message author, and more context information. Using cogs we can seperate logic into interchangeable pieces that can be loaded and unloaded as needed.
+A cog is a class that inheirits `from discord.ext import commands` using `(commands.Cog, name="CogName")` for the parameters, inside this class we have overridable methods that have a context variable that can be used to pull information from the message recieved, the message author, and more context information. Using cogs we can seperate logic into interchangeable pieces that can be loaded and unloaded as needed.
 
 For example, we can have a bot connected to multiple Discord servers. Based on the name of the server, or some other determining factor, when the bot loads it is able to load specific cogs. One server could have general, games, mentor while another server could have general, games, music, agent
 
@@ -124,5 +124,62 @@ For example, we can have a bot connected to multiple Discord servers. Based on t
 
 1. If not already completed, finish **Get Discord Token** steps, and **Setup Project** instructions steps from Simple Bot
 
+2. We need to create the folder structure for our DiscordBot within
+```
+DiscordBot
+    ├── *bots
+    │   ├── *__init__.py
+    │   └── *discordbot.py # Instantiate this class to start the bot
+    ├── *cogs
+    │   ├── *__init__.py
+    │   ├── agent.py # Agent cog for AI activities
+    │   ├── games.py # Fun games for users to interact with
+    │   ├── *general.py # Regular commands that are needed across every bot
+    │   ├── logging.py # Logs every interaction the bot registers
+    │   └── mentor.py # Connects user to a mentor interface to ask specific questions
+    ├─ utilities
+    |   ├── __init__.py
+    |   ├── database_utils.py # Functions specific to interacting with external database
+    |   └── logging_utils.py # Implements the Logging class and methods that store logs in database
+    ├── *main.py # Use this to start up our Advanced Bot
+    └── main_simple.py # Previous Simple Bot example
+```
+> [!Note]
+>
+> For now, only files and folders with a `*` prefix need to be created
 
+### Develop Project
 
+The core of our project can be found within our `discordbot.py` file
+
+1. Import the same libraries as before, adding one more import for a specific class to inherit from
+```
+import discord
+from discord.ext import commands
+from dotenv import load_dotenv
+load_dotenv()
+```
+
+2. Create our Discord bot class, inhereits from the Bot class in commands
+```
+class DiscordBot(commands.Bot):
+```
+
+3. Set up init method to store important variables. We pass cogs as an optional argument that can hold an indefinite amount of values. We then configure the intents and other default config info to pass to the \_\_init__ method of the parent class. Once the class object is instantiated, we use the built-in run method to start our bot.
+```
+  def __init__(self, *cogs):
+    self.cogs_list = cogs
+    # Configure intents here
+    intents = discord.Intents.default()
+    intents.presences = True
+    intents.members = True
+    intents.message_content = True
+    
+    description = "A Discord bot that does stuff."
+    self.prefix = "!"
+    super().__init__(command_prefix=self.prefix,
+                     intents=intents,
+                     description=description)
+    
+    self.run(os.getenv("BOT_TOKEN"))
+```
