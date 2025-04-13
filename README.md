@@ -28,9 +28,9 @@ Instructions to run a Discord bot from a single file
 
 ### Setup Project
 
-1. Create a project directory ../Projects/DiscordBot/
+1. Create a project directory ..\Projects\DiscordBot\
 
-2. Open a terminal and move to directory `cd ../Projects/DiscordBot/`
+2. Open a terminal and move to directory `cd ..\Projects\DiscordBot\`
 
 3. Create a virtual environment to hold our libraries `python -m venv bot-env`
 
@@ -38,11 +38,19 @@ Instructions to run a Discord bot from a single file
 
 5. Install libraries `pip install -U discord.py, python-dotenv`
 > [!Note]
-> discord.py is used to operate bot, python-dotenv is used to interact with .env files
+> discord.py is used to operate bot
+> 
+> python-dotenv is used to interact with .env files
+
+6. Create environment file through text editor, save as all files and name it .env
+```
+# example .env file
+BOT_TOKEN="TOKEN_EXAMPLE_CODE"
+```
 
 ### Develop Project
 
-1. Create project file ../Projects/DiscordBot/main_simple.py
+1. Create project file ..\Projects\DiscordBot\main_simple.py
 
 
 2. Import necessary libraries, after importing the function load_dotenv() we need to call it, os is used to access our .env variables with dotenv
@@ -64,7 +72,15 @@ intents.message_content = True # Gives the bot access to read message content, s
 client = discord.Client(intents=intents)
 ```
 
-4. Create an override function with the decorator `@client.event`, this triggers anytime a message is posted on the server or sent directly to the bot
+4. Store token information from environment variable
+```
+# Setup token from environment,
+# Alternatively this can be hardcoded
+# token = "t0k3n...akljS2"
+token = os.getenv("BOT_TOKEN")
+```
+
+5. Create an override function with the decorator `@client.event`, `on_message(message)` triggers anytime a message is posted on the server or sent directly to the bot
 ```
 @client.event
 async def on_message(message):
@@ -88,10 +104,25 @@ Once we validated that the message is not our own, we can use a case match state
             print(f"[MESSAGE] {message.author}: {message.content}")
 ```
 
-5. Finally, the most important step we need to do is run our bot
+6. Finally, the most important step we need to do is run our bot
 ```
 # Run our bot once it is configured
 client.run(token)
 ```
 
 See `main_simple.py` for the entire file
+
+## Advanced Bot Instructions
+
+Instead of running everything from a single file that we endlessly scroll through to find a line to work on, we break everything up into meaningful classes that have their dedicated jobs, or **cogs**.
+
+A cog is a class that inheirits `from discord.ext import commands` using `(commands.Cog, name="Name")` for the parameters, inside this class we have overridable methods that have a context variable that can be used to pull information from the message recieved, the message author, and more context information. Using cogs we can seperate logic into interchangeable pieces that can be loaded and unloaded as needed.
+
+For example, we can have a bot connected to multiple Discord servers. Based on the name of the server, or some other determining factor, when the bot loads it is able to load specific cogs. One server could have general, games, mentor while another server could have general, games, music, agent
+
+### Setup Project
+
+1. If not already completed, finish **Get Discord Token** steps, and **Setup Project** instructions steps from Simple Bot
+
+
+
