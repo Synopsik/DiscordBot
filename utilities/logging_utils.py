@@ -10,8 +10,7 @@ def setup_logging(
         loop: asyncio.AbstractEventLoop,
         logger_name: Optional[str] = None,
         level: int = logging.INFO,
-        table_name: str = "logs"
-) -> logging.Logger:
+        table_name: str = "logs"):
     """
     Configures and returns a Python logger that uses the DatabaseLogHandler.
     - db_pool: The asyncpg Pool for database interactions.
@@ -31,7 +30,7 @@ def setup_logging(
     db_handler = DatabaseLogHandler(db_pool=db_pool, loop=loop, table_name=table_name)
     # You could also attach additional formatters here:
     formatter = logging.Formatter(
-        fmt="%(asctime)s [%(name)s] %(levelname)s: %(message)s",
+        fmt="[%(asctime)s] [%(levelname)s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
     db_handler.setFormatter(formatter)
@@ -58,6 +57,10 @@ class DatabaseLogHandler(logging.Handler):
         Called automatically when a log event occurs. Formats the log message
         and submits a database write through an async method.
         """
+
+        print(self.format(record))
+
+        """
         try:
             msg = self.format(record)
             # For consistent timestamps, we can convert the 'created' field (float) into a datetime
@@ -74,6 +77,7 @@ class DatabaseLogHandler(logging.Handler):
             )
         except Exception:
             self.handleError(record)
+        """
 
     async def _write_log_to_db(self, log_time: datetime, logger_name: str, level: str, message: str):
         """

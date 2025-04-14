@@ -4,7 +4,8 @@ from discord.ext import commands
 from cogs.logging import get_time
 
 class MentorCog(commands.Cog, name="Mentor"):
-    def __init__(self, bot, conn):
+    def __init__(self, bot, conn, logger):
+        self.logger = logger
         self.bot = bot
         self.conn = conn
         self.curr = conn.cursor()
@@ -17,8 +18,7 @@ class MentorCog(commands.Cog, name="Mentor"):
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"[{await get_time()}] [INITIALIZED] Mentor Cog")
-
+        self.logger.debug("Loaded Mentor Cog")
     @commands.command(name="add_mentor")
     async def add_mentor(self, ctx, member: discord.Member, skills: str):
         self.curr.execute("INSERT OR REPLACE INTO mentors VALUES (?, ?, ?)",

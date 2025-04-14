@@ -2,12 +2,13 @@ from discord.ext import commands
 from cogs.logging import get_time
 
 class GeneralCog(commands.Cog, name="General"):
-    def __init__(self, bot):
+    def __init__(self, bot, logger):
+        self.logger = logger
         self.bot = bot
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"[{await get_time()}] [INITIALIZED] Loaded General Cog")
+        self.logger.debug("Loaded General Cog")
 
     @commands.command(name="ping")
     async def ping(self, ctx):

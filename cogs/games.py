@@ -3,13 +3,13 @@ from discord.ext import commands
 from cogs.logging import get_time
 
 class GamesCog(commands.Cog, name="Games"):
-    def __init__(self, bot):
+    def __init__(self, bot, logger):
         self.bot = bot
+        self.logger = logger
 
     @commands.Cog.listener()
     async def on_ready(self):
-        print(f"[{await get_time()}] [EVENT] Loaded Games Cog")
-
+        self.logger.debug("Loaded Games Cog")
     @commands.command(name="coinflip")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def coinflip(self, ctx):
