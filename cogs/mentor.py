@@ -1,7 +1,7 @@
 import sqlite3
 import discord
 from discord.ext import commands
-from cogs.logging import get_time
+from cogs.logging import get_formatted_time
 
 class MentorCog(commands.Cog, name="Mentor"):
     def __init__(self, bot, conn, logger):

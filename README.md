@@ -10,7 +10,11 @@ Or
 
 Or    
 
-3. Through a python console, instantiate DiscordBot() on its own from bots/discordbots.py or store into a var `bot = DiscordBot()`
+3. Through a python console, 
+
+    instantiate DiscordBot() on its own from bots/discordbots.py 
+    
+    or store into a var `bot = DiscordBot()`
 
 ## Simple Bot Instructions
 
@@ -22,21 +26,31 @@ Example file: main_simple.py
 
 1. Login to Discord and create a private server
 
+
 2. Follow [this link](https://discordpy.readthedocs.io/en/stable/discord.html) to create a bot account and get your token
   
+
 3. Invite it to your server
 
 ### Setup Project
 
 4. Create a new project directory ..\Projects\DiscordBot\
 
+
 5. * Shift+Right Click inside the new folder 
    * Select `Open PowerShell` 
    * (or Open a terminal and `cd ..\Projects\DiscordBot\`)
 
+
 6. Create a virtual environment to hold our libraries `python -m venv bot-env`
 
-7. Enter virtual environment `.\bot-env\Scripts\activate` on Windows, `source bot-env/bin/activate` on Linux  
+
+7. Enter virtual environment
+
+    `.\bot-env\Scripts\activate` on Windows
+
+    `source bot-env/bin/activate` on Linux  
+
 
 8. Install libraries `pip install -U discord.py, python-dotenv`
 > [!Note]
@@ -80,9 +94,10 @@ client = discord.Client(intents=intents)
 13. Store token information from environment variable
 ```
 # Setup token from environment,
-# Alternatively this can be hardcoded
-# token = "t0k3n...akljS2"
 token = os.getenv("BOT_TOKEN")
+
+# Alternatively this can just be hardcoded
+# token = "t0k3n...akljS2"
 ```
 
 14. * Create an override function `on_message(message)` with the decorator `@client.event`
@@ -96,7 +111,7 @@ async def on_message(message):
         return
 ```
 
-* Once we validated that the message is not our own, we can use a case match statement to look for simple commands and process messages
+* We validated that the message did not originate from our bot, then we can use a case match statement to look for simple commands and process messages
 ```
 # Begin case statement to search for bot commands
     match message.content:
@@ -133,6 +148,7 @@ Example file: main.py
 ### Setup Project
 
 1. If not already completed, finish **Get Discord Token** steps, and **Setup Project** instructions steps from Simple Bot
+
 
 2. We need to create the folder structure for our DiscordBot within
 ```

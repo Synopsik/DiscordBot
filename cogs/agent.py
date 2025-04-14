@@ -1,1 +1,1 @@
-from cogs.logging import get_time
+from cogs.logging import get_formatted_time

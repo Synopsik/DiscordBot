@@ -1,6 +1,6 @@
 import random
 from discord.ext import commands
-from cogs.logging import get_time
+from cogs.logging import get_formatted_time
 
 class GamesCog(commands.Cog, name="Games"):
     def __init__(self, bot, logger):

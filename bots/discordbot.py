@@ -10,7 +10,7 @@ load_dotenv()
 
 from cogs.games import GamesCog
 from cogs.general import GeneralCog
-from cogs.logging import LoggingCog, get_time
+from cogs.logging import LoggingCog, get_formatted_time
 from cogs.mentor import MentorCog
 
 

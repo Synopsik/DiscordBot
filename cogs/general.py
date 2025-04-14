@@ -1,5 +1,5 @@
 from discord.ext import commands
-from cogs.logging import get_time
+from cogs.logging import get_formatted_time
 
 class GeneralCog(commands.Cog, name="General"):
     def __init__(self, bot, logger):

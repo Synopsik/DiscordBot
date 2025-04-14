@@ -7,7 +7,7 @@ import logging
 
 
 
-async def get_time():
+async def get_formatted_time():
     dt = datetime.datetime.now()
     return dt.strftime('%Y-%m-%d %H:%M:%S')
 
@@ -22,8 +22,9 @@ class LoggingCog(commands.Cog, name="Logging"):
     async def on_ready(self):
         self.logger.debug("Loaded Log Cog")
 
-    # Messages ---------------------------------------------------------------------------------------
-
+    # ----------------------------------------------------------------------------
+    # Messages
+    # ----------------------------------------------------------------------------
 
     @commands.Cog.listener()
     async def on_message(self, message):
@@ -43,9 +44,9 @@ class LoggingCog(commands.Cog, name="Logging"):
     async def on_reaction_add(self, reaction, user):
         self.logger.debug(f"{user.name} has added a reaction to a message: {reaction.emoji}")
 
-
-    # Members ---------------------------------------------------------------------------------------
-
+    # ----------------------------------------------------------------------------
+    # Members
+    # ----------------------------------------------------------------------------
 
     @commands.Cog.listener()
     async def on_member_join(self, member):
@@ -59,8 +60,9 @@ class LoggingCog(commands.Cog, name="Logging"):
     async def on_member_update(self, before, after):
         self.logger.warning(f"{before.name} has changed their nickname to {after.name}")
 
-    # Commands ---------------------------------------------------------------------------------------
-
+    # ----------------------------------------------------------------------------
+    # Commands
+    # ----------------------------------------------------------------------------
 
     @commands.Cog.listener()
     async def on_command_completion(self, ctx):
