@@ -17,3 +17,10 @@ class GeneralCog(commands.Cog, name="General"):
     @commands.command(name="greet")
     async def greet(self, ctx):
         await ctx.send("Hello!")
+
+    async def dm(self, ctx, message):
+        try:
+            await ctx.author.send(message)
+            self.logger.info(f"{self.bot.user} sent a DM to {ctx.author}")
+        except Exception as e:
+            self.logger.error(f"Error sending direct message: {e}")

@@ -13,10 +13,8 @@ from cogs.general import GeneralCog
 from cogs.logging import LoggingCog, get_formatted_time
 from cogs.mentor import MentorCog
 
-
 def start_bot():
-    DiscordBot("general", "games", "logging")
-
+    DiscordBot("general", "games", "logging", "mentor")
 
 class DiscordBot(commands.Bot):
     def __init__(self, *cogs):
@@ -52,9 +50,8 @@ class DiscordBot(commands.Bot):
         try:
             loop = asyncio.get_running_loop()
             self.logger = setup_logging(self.db_pool, loop, __name__, logging.DEBUG, "logs")
-
             if db_connected:
-                self.logger.debug("Database connection successful.")
+                self.logger.debug("Successfully configured logger.")
         except Exception as e:
             print(f"Failed to configure logger. Error: {e}")
 
@@ -70,9 +67,9 @@ class DiscordBot(commands.Bot):
                         await self.add_cog(LoggingCog(self, self.logger))
                 case "mentor":
                     if self.db_pool is not None:
-                        await self.add_cog(MentorCog(self, self.db_pool, self.logger))
+                        await self.add_cog(MentorCog(self, self.logger))
                 case _:
-                    print("Couldn't find cog.")
+                    self.logger.error(f"Cog {cog} not found.")
 
     async def on_ready(self):
         self.logger.debug(f"Logged in as {self.user} (ID: {self.user.id})")
@@ -82,5 +79,6 @@ class DiscordBot(commands.Bot):
     async def close(self):
         if self.db_pool is not None:
             if hasattr(self, "db_pool"):
+                self.logger.debug("Close database connection")
                 await self.db_pool.close()
         await super().close()

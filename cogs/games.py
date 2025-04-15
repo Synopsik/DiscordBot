@@ -15,6 +15,7 @@ class GamesCog(commands.Cog, name="Games"):
     async def coinflip(self, ctx):
         result = random.choice(["Heads", "Tails"])
         await ctx.send(f"The coin landed on **{result}**")
+        self.logger.info(f"The coin landed on {result}")
 
     @commands.command(name="rps")
     async def rps(self, ctx, choice: str):
@@ -36,3 +37,4 @@ class GamesCog(commands.Cog, name="Games"):
         else:
             outcome = "I win!"
         await ctx.send(f"You chose **{choice}**, I chose **{bot_choice}**. {outcome}")
+        self.logger.info(f"{ctx.author} chose {choice}, I chose {bot_choice}. {outcome}")
