@@ -11,7 +11,7 @@ class AdminCog(commands.Cog, name="Admin"):
         self.logger.debug("Loaded Admin Cog")
 
     @commands.command(name="clear_channel")
-    async def clear_channel(self, ctx): # I want to update this so that you can pass an optional arg for a member
+    async def clear_channel(self, ctx):
         try:
             if not isinstance(ctx.channel, discord.DMChannel):  # Ensure the command is not executed in a DM channel
                 await ctx.channel.purge(limit=None) # Purge channel

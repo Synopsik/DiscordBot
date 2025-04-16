@@ -12,15 +12,31 @@ class GeneralCog(commands.Cog, name="General"):
     async def on_ready(self):
         self.logger.debug("Loaded General Cog")
 
+    # ------------------------------------------------------------------------------------------------------
+    # General
+    # ------------------------------------------------------------------------------------------------------
+
     @commands.command(name="ping")
     async def ping(self, ctx):
-        await ctx.typing()
-        await asyncio.sleep(1)
-        await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms")
+        try:
+            await ctx.typing() # Imitate typing for half a second
+            await asyncio.sleep(0.5)
+            await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms") # Then send message
+        except Exception as e:
+            self.logger.error(f"Error pinging: {e}")
 
     @commands.command(name="hello")
     async def greet(self, ctx):
-        await ctx.send("Hi!")
+        try:
+            await ctx.typing() # Imitate typing for half a second
+            await asyncio.sleep(0.5)
+            await ctx.send("Hi!") # Then send message
+        except Exception as e:
+            self.logger.error(f"Error greeting: {e}")
+
+    # ------------------------------------------------------------------------------------------------------
+    # Messages
+    # ------------------------------------------------------------------------------------------------------
 
     @commands.command(name="clear_dm")
     async def clear_dm(self, ctx):

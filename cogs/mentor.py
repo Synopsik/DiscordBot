@@ -13,15 +13,11 @@ class MentorCog(commands.Cog, name="Mentor"):
     @commands.command(name="subjects")
     async def select_subject(self, ctx):
         message = f"The currently available subjects are:"
-
-        # Get list of currently available subjects
-        for index, subject in enumerate(self.subjects):
-            message += f"\n{index + 1}. {subject}"
-
-        # Try to get a reference to General cog so we can dm user a list of subjects
-        general_cog = self.bot.get_cog("General")
         try:
-            # Send DM to user
+            # Get list of currently available subjects
+            for index, subject in enumerate(self.subjects):
+                message += f"\n{index + 1}. {subject}"
+            # Send DM to user and log it
             await ctx.author.send(message)
             self.logger.info(message)
         except Exception as e:

@@ -5,13 +5,9 @@ from utilities.logging_utils import setup_logging
 
 import logging
 
-
-
 async def get_formatted_time():
     dt = datetime.datetime.now()
     return dt.strftime('%Y-%m-%d %H:%M:%S')
-
-
 
 class LoggingCog(commands.Cog, name="Logging"):
     def __init__(self, bot, logger):
@@ -68,10 +64,6 @@ class LoggingCog(commands.Cog, name="Logging"):
     async def on_command_completion(self, ctx):
         self.logger.debug(f"Command completed: {ctx.prefix}{ctx.command}")
 
-
     @commands.Cog.listener()
     async def on_command_error(self, ctx, error):
         self.logger.error(f"Command error: {error}")
-
-
-
