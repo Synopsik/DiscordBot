@@ -14,14 +14,14 @@ class MentorCog(commands.Cog, name="Mentor"):
     async def select_subject(self, ctx):
         message = f"The currently available subjects are:"
 
-        # List out currently available subjects
+        # Get list of currently available subjects
         for index, subject in enumerate(self.subjects):
             message += f"\n{index + 1}. {subject}"
 
-        # Imitate typing, then reply and log message
+        # Try to get a reference to General cog so we can dm user a list of subjects
         general_cog = self.bot.get_cog("General")
-        if general_cog:
+        try:
             await general_cog.dm(ctx, message)
             self.logger.info(message)
-        else:
-            self.logger.error("General Cog not found!")
+        except Exception as e:
+            self.logger.error(f"General Cog not found: {e}")

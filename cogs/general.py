@@ -6,21 +6,17 @@ class GeneralCog(commands.Cog, name="General"):
         self.logger = logger
         self.bot = bot
 
-
     @commands.Cog.listener()
     async def on_ready(self):
         self.logger.debug("Loaded General Cog")
-
 
     @commands.command(name="ping")
     async def ping(self, ctx):
         await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms")
 
-
     @commands.command(name="hello")
     async def greet(self, ctx):
         await ctx.send("Hi!")
-
 
     async def dm(self, ctx, message):
         try:

@@ -11,11 +11,23 @@ class AdminCog(commands.Cog, name="Admin"):
         self.logger.debug("Loaded Admin Cog")
 
     @commands.command(name="clear_dm")
-    async def clear_dm(self, ctx, member: discord.Member):
-        if member.name == 'synopsik':
-            dm_channel = await member.create_dm()  # Get or create the DM channel with the member
-            async for message in dm_channel.history(limit=None):  # Fetch all message history in the DM
-                if message.author == self.bot.user:  # Check if the message was sent by the bot
-                    await message.delete()  # Delete the message
-        else:
-            print(member.name)
+    async def clear_dm(self, ctx): # I want to update this so that you can pass an optional arg for a member
+        try:
+            if isinstance(ctx.channel, discord.DMChannel):
+                async for message in ctx.channel.history(limit=None):
+                    if message.author == self.bot.user:
+                        await message.delete()
+            else:
+                await ctx.send("This command cannot be used in a server channel.")
+        except Exception as e:
+            self.logger.error(f"Error clearing direct messages: {e}")
+
+    @commands.command(name="clear_channel")
+    async def clear_channel(self, ctx): # I want to update this so that you can pass an optional arg for a member
+        try:
+            if not isinstance(ctx.channel, discord.DMChannel):  # Ensure the command is not executed in a DM channel
+                await ctx.channel.purge(limit=None) # Purge channel
+            else:
+                await ctx.send("This command cannot be used in direct messages.")
+        except Exception as e:
+            self.logger.error(f"Error clearing channel: {e}")
