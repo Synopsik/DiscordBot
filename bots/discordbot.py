@@ -1,4 +1,6 @@
 import os
+
+from cogs.admin import AdminCog
 from utilities.logging_utils import setup_logging
 import asyncio
 import asyncpg
@@ -15,7 +17,7 @@ from cogs.mentor import MentorCog
 
 
 def start_bot():
-    DiscordBot("general", "games", "logging", "mentor")
+    DiscordBot("general", "games", "logging", "mentor", "admin")
 
 
 class DiscordBot(commands.Bot):
@@ -67,6 +69,7 @@ class DiscordBot(commands.Bot):
         except Exception as e:
             print(f"Failed to configure logger. Error: {e}")
 
+
         # From our cogs_list on init, loop through and use case matching to check for cogs
         for cog in self.cogs_list:
             match cog:
@@ -75,11 +78,11 @@ class DiscordBot(commands.Bot):
                 case "games":
                     await self.add_cog(GamesCog(self, self.logger))
                 case "logging":
-                    if self.db_pool is not None:
                         await self.add_cog(LoggingCog(self, self.logger))
                 case "mentor":
-                    if self.db_pool is not None:
                         await self.add_cog(MentorCog(self, self.logger))
+                case "admin":
+                        await self.add_cog(AdminCog(self, self.logger))
                 case _:
                     # Default case: if no names matches, no cog is added
                     self.logger.error(f"Cog {cog} not found.")
