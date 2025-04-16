@@ -44,9 +44,10 @@ class DiscordBot(commands.Bot):
         # Get db url from .env
         db_url = os.getenv("DB_URL")
         db_connected = False
+        # If db_url is valid try connecting to the db
         if db_url:
             try:
-                # If db_url is valid try connecting to the db
+                # Can't have this in init since it uses async
                 self.db_pool = await asyncpg.create_pool(dsn=db_url)
                 # Set db_connected true so when our logger init's we can display status
                 db_connected = True
@@ -57,6 +58,7 @@ class DiscordBot(commands.Bot):
         else:
             print("No DB_URL found. Skipping database connection.")
 
+        # Since the db connection needs to be here to async, we need to init logger and cogs here instead of __init__
         try:
             # Get a reference to the current async loop
             loop = asyncio.get_running_loop()
