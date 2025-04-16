@@ -208,7 +208,7 @@ The main file used to run our program
     * then instantiate DiscordBot with the string parameters we want attached to the bot as cogs
 
 ```
-from bots.discordbot import DiscordBot()
+from bots.discordbot import DiscordBot
 
 if __name__ == "__main__":
     DiscordBot("general")
@@ -244,30 +244,30 @@ class DiscordBot(commands.Bot):
    * After we run the init method of the Bot parent class, we use Bots built-in `run()` method to start it up
 ```
     def __init__(self, *cogs):
-    
-    # Configure cogs
-    for cog in cogs:
-        case "general":
-            await self.add_cog(GeneralCog(self))
-        case _:
-            print("No cogs found")
-    
-    # Configure intents
-    intents = discord.Intents.default()
-    intents.presences = True
-    intents.members = True
-    intents.message_content = True
-    
-    # Configure description and prefix
-    description = "A Discord bot that does stuff."
-    self.prefix = "!"
-    
-    # Pass variables to Parents __init__ method
-    super().__init__(command_prefix=self.prefix,
-                     intents=intents,
-                     description=description)
-    
-    self.run(os.getenv("BOT_TOKEN")) # Run bot
+        # Configure cogs
+        for cog in cogs:
+            match cog:
+                case "general":
+                    await self.add_cog(GeneralCog(self))
+                case _:
+                    print("No cogs found")
+        
+        # Configure intents
+        intents = discord.Intents.default()
+        intents.presences = True
+        intents.members = True
+        intents.message_content = True
+        
+        # Configure description and prefix
+        description = "A Discord bot that does stuff."
+        self.prefix = "!"
+        
+        # Pass variables to Parents __init__ method
+        super().__init__(command_prefix=self.prefix,
+                         intents=intents,
+                         description=description)
+        
+        self.run(os.getenv("BOT_TOKEN")) # Run bot
 ```
 7. Finally, we log our bot's name and ID to the console once it's ready
 
