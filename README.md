@@ -1,26 +1,26 @@
 # DiscordBot
 
-Run either
+Run either:
 
 1. Through the `main.py` file
 
-Or
 
 2. Through the `main_single_file.py` file
 
-Or    
 
-3. Through a python console, 
-
-    instantiate `DiscordBot()` on its own from `bots/discordbots.py` 
+3. Through a python console, instantiate `DiscordBot()` on its own from `bots/discordbots.py` 
     
     or store into a var `bot = DiscordBot()`
+
+---
 
 ## Simple Bot Instructions
 
 Instructions to run a Discord bot from a single file
 
 Example file: `main_single_file.py`
+
+---
 
 ### Get Discord Token
 
@@ -31,6 +31,8 @@ Example file: `main_single_file.py`
   
 
 3. Invite it to your server
+
+---
 
 ### Setup Project
 
@@ -58,11 +60,15 @@ Example file: `main_single_file.py`
 > 
 > python-dotenv is used to interact with .env files
 
-9. Create environment file through text editor, save as all files and name it `.env`
+9. Create environment file through text editor. 
+    
+    When saving, as the file type select all files, then name it `.env`
 ```
 # example .env file
 BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 ```
+
+---
 
 ### Develop Project
 
@@ -102,6 +108,9 @@ token = os.getenv("BOT_TOKEN")
 
 14. * Create an override function `on_message(message)` with the decorator `@client.event`
     * This triggers anytime a message is posted on the server or sent directly to the bot
+    * Async allows this function to be called concurrently with other async calls
+
+        [this link](https://gist.github.com/Synopsik/cfdacaf1140111cd1acc101b0c1ca968) shows a simple example
 ```
 @client.event
 async def on_message(message):
@@ -133,13 +142,15 @@ client.run(token)
 
 See `main_single_file.py` for the entire file
 
+---
+
 ## Advanced Bot Instructions
 
-Instead of running everything from a single file that we endlessly scroll through to find a line to work on, we break our program up into meaningful classes that have their dedicated jobs, or **cogs**.
+Instead of running everything from a single file that that can get messy and confusing, we break our program up into meaningful classes that have their dedicated jobs, or **cogs**.
 
-A cog is a class that inherits `from discord.ext import commands` using `(commands.Cog, name="CogName")` for the parameters, inside this class we have overridable methods that have a context variable that can be used to pull information from the message received, the message author, and more context information. Using cogs we can separate logic into interchangeable pieces that can be loaded and unloaded as needed.
+A cog is a class that inherits the `commands.Cog` class `from discord.ext import commands`. When creating our class we also need to include a name parameter, this will look like `CogClass(commands.Cog, name="CogName")`. Inside this class, we have overridable methods that have a context parameter that can be used to pull information from the message received, the message author, and more context information. Using cogs we can separate logic into interchangeable pieces that can be loaded and unloaded as needed.
 
-For example, we can have a bot connected to multiple Discord servers. Based on the name of the server, or some other determining factor, after the bot init's it is able to load specific cogs. One server could have general, games, mentor while another server could have general, music, agent.
+Using OOP principles, we can create multiple instances from a single bot class that use different variations of cogs, depending on some factor. One bot instance could have general, games, mentor while another instance could be using general, music, agent.
 
 Example file: `main.py`
 
@@ -174,43 +185,145 @@ DiscordBot
 > [!Note]
 > For now, only files and folders with a `*` prefix need to be created
 
+---
+
 ### Develop Project
 
-The core of our project can be found within our `discordbot.py` file
+---
 
-3. * Import the same libraries as before
+#### main.py
+
+3. * Our main file will be very simple,
+
+    * all we are doing is importing the `DiscordBot()` class (that we haven't created yet)
+    
+    * then instantiate DiscordBot with the string parameters we want attached to the bot as cogs
+
+```
+from bots.discordbot import DiscordBot()
+
+if __name__ == "__main__":
+    DiscordBot("general")
+
+```
+
+
+---
+
+#### discordbot.py
+
+4. * Import the same libraries as our SimpleBot
    * Additionally, we use `commands` so that our class can inherit directly from `commands.Bot`
 ```
+from cogs.general import GeneralCog
+
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 load_dotenv()
 ```
 
-4. Create our Discord bot class, using our inherited `commands.Bot` as the Parent class
+5. Create our Discord bot class, using our inherited `commands.Bot` as the Parent class
 ```
 class DiscordBot(commands.Bot):
 ```
 
-5. * Set up init method to store important variables.  
-   * We pass cogs as an optional argument that can hold an indefinite amount of values. 
-   * We then configure the intents and other default config info to pass to the \_\_init__ method of the parent class. 
-   * After we run the init method of the Bot parent class, we use the built-in run method to start our bot.
+6. * Set up init method in `DiscordBot()` to store important variables.  
+   * We pass cogs as an optional string argument that can hold an indefinite amount of names we can use to attach cogs
+   * We then configure the intents and other default config info to pass to the \_\_init__ method of the parent class
+   * After we run the init method of the Bot parent class, we use Bots built-in `run()` method to start it up
 ```
-  def __init__(self, *cogs):
-    self.cogs_list = cogs
+def __init__(self, *cogs):
 
-    # Configure intents here
-    intents = discord.Intents.default()
-    intents.presences = True
-    intents.members = True
-    intents.message_content = True
-    
-    description = "A Discord bot that does stuff."
-    self.prefix = "!"
-    super().__init__(command_prefix=self.prefix,
-                     intents=intents,
-                     description=description)
-    
-    self.run(os.getenv("BOT_TOKEN"))
+# Configure cogs
+for cog in cogs:
+    case "general":
+        await self.add_cog(GeneralCog(self))
+    case _:
+        print("No cogs found")
+
+# Configure intents
+intents = discord.Intents.default()
+intents.presences = True
+intents.members = True
+intents.message_content = True
+
+# Configure description and prefix
+description = "A Discord bot that does stuff."
+self.prefix = "!"
+
+# Pass variables to Parents __init__ method
+super().__init__(command_prefix=self.prefix,
+                 intents=intents,
+                 description=description)
+
+self.run(os.getenv("BOT_TOKEN")) # Run bot
 ```
+7. Finally, we log our bot's name and ID to the console once it's ready
+
+```
+async def on_ready(self):
+    # Called when bot is up and running
+    print(f"Logged in as {self.user} (ID: {self.user.id})")
+```
+
+---
+
+#### general.py
+
+8. * For `general.py` we need to import the essentials to create a cog class. 
+   * Optionally, we will also need asyncio for a timer in our ping command
+
+```
+import discord
+from discord.ext import commands
+import asyncio
+```
+
+9. * Now, lets create our `GeneralCog()` class. 
+    
+        Not only do we inherit `commands.Cog`, we also need to pass a name argument for the bot
+   * Then we can set up our __init__ method, we are only passing the DiscordBot() class to the cog
+
+```
+class GeneralCog(commands.Cog, name="General"):
+    def __init__(self, bot):
+        self.bot = bot
+```
+
+10. * Just like in our SimpleBot, we need to use decorators to listen for specific events
+    * In this example, we are just printing to console when our cog is loaded
+
+```
+    @commands.Cog.listener()
+    async def on_ready(self):
+        self.logger.debug("Loaded General Cog")
+```
+
+11. * Finally, lets set up our ping command
+    * We use the name parameter to name our command,
+
+        the prefix configured in discordbot.py `self.prefix = "!"` is how we will call it
+    * We can then use `ctx.typing()` to make it look like our bot is typing a reply
+    * We sleep for half a second before our message sends
+    * Then we can use our context `ctx.send()` to send our message
+    * You can also use `ctx.reply` to directly reply to the user
+
+
+```
+    @commands.command(name="ping")
+    async def ping(self, ctx):
+        await ctx.typing() # Imitate typing for half a second
+        await asyncio.sleep(0.5)
+        await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms") # Then send message
+```
+
+---
+
+Congratulations on making it all the way through!
+    
+You now have a simple bot that can reply to you with a message and its latency
+
+There are many other command examples in this repo 
+    
+Feel free to clone this and start experimenting with cogs and commands
