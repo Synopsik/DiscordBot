@@ -122,7 +122,7 @@ async def on_message(message):
 
 * We validated that the message did not originate from our bot, then we can use a case match statement to look for simple commands and process messages
 ```
-# Begin case statement to search for bot commands
+    # Begin case statement to search for bot commands
     match message.content:
         case "!ping":
             print(f"[COMMAND] {message.author} sent command {message.content}")
@@ -193,6 +193,8 @@ DiscordBot
 
 #### main.py
 
+The main file used to run our program
+
 3. * Our main file will be very simple,
 
     * all we are doing is importing the `DiscordBot()` class (that we haven't created yet)
@@ -211,6 +213,8 @@ if __name__ == "__main__":
 ---
 
 #### discordbot.py
+
+This file contains the DiscordBot class that we make instances from
 
 4. * Import the same libraries as our SimpleBot
    * Additionally, we use `commands` so that our class can inherit directly from `commands.Bot`
@@ -233,43 +237,45 @@ class DiscordBot(commands.Bot):
    * We then configure the intents and other default config info to pass to the `__init__` method of the parent class
    * After we run the init method of the Bot parent class, we use Bots built-in `run()` method to start it up
 ```
-def __init__(self, *cogs):
-
-# Configure cogs
-for cog in cogs:
-    case "general":
-        await self.add_cog(GeneralCog(self))
-    case _:
-        print("No cogs found")
-
-# Configure intents
-intents = discord.Intents.default()
-intents.presences = True
-intents.members = True
-intents.message_content = True
-
-# Configure description and prefix
-description = "A Discord bot that does stuff."
-self.prefix = "!"
-
-# Pass variables to Parents __init__ method
-super().__init__(command_prefix=self.prefix,
-                 intents=intents,
-                 description=description)
-
-self.run(os.getenv("BOT_TOKEN")) # Run bot
+    def __init__(self, *cogs):
+    
+    # Configure cogs
+    for cog in cogs:
+        case "general":
+            await self.add_cog(GeneralCog(self))
+        case _:
+            print("No cogs found")
+    
+    # Configure intents
+    intents = discord.Intents.default()
+    intents.presences = True
+    intents.members = True
+    intents.message_content = True
+    
+    # Configure description and prefix
+    description = "A Discord bot that does stuff."
+    self.prefix = "!"
+    
+    # Pass variables to Parents __init__ method
+    super().__init__(command_prefix=self.prefix,
+                     intents=intents,
+                     description=description)
+    
+    self.run(os.getenv("BOT_TOKEN")) # Run bot
 ```
 7. Finally, we log our bot's name and ID to the console once it's ready
 
 ```
-async def on_ready(self):
-    # Called when bot is up and running
-    print(f"Logged in as {self.user} (ID: {self.user.id})")
+    async def on_ready(self):
+        # Called when bot is up and running
+        print(f"Logged in as {self.user} (ID: {self.user.id})")
 ```
 
 ---
 
 #### general.py
+
+Our general cog file, all of its functionality is attached to our DiscordBot
 
 8. * For `general.py` we need to import the essentials to create a cog class. 
    * Optionally, we will also need asyncio for a timer in our ping command
@@ -297,7 +303,7 @@ class GeneralCog(commands.Cog, name="General"):
 ```
     @commands.Cog.listener()
     async def on_ready(self):
-        self.logger.debug("Loaded General Cog")
+        print("Loaded General Cog")
 ```
 
 11. * Finally, lets set up our ping command
