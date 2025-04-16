@@ -43,6 +43,8 @@ Example file: `main_single_file.py`
    * Select `Open PowerShell` 
    * (or Open a terminal and `cd ..\Projects\DiscordBot\`)
 
+![Open PowerShell](https://i.imgur.com/hqFyfS5.png)
+
 
 6. Create a virtual environment to hold our libraries `python -m venv bot-env`
 
@@ -60,11 +62,15 @@ Example file: `main_single_file.py`
 > 
 > python-dotenv is used to interact with .env files
 
-9. Create environment file through text editor. 
+9. * Make a new text file and `Save As` to create our .env file 
     
-    When saving, as the file type select all files, then name it `.env`
+    * For the file type select `All Files`, then name it `.env`
+
+![Save As All Files](https://i.imgur.com/NSNOi48.png)
+
+* Enter this in your .env file and replace the token example code
+
 ```
-# example .env file
 BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 ```
 
@@ -72,7 +78,7 @@ BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 
 ### Develop Project
 
-10. Create project file `..\Projects\DiscordBot\main_single_file.py`
+10. Repoen the New Text Document you had to use to make the .env file and now create our project file `..\Projects\DiscordBot\main_single_file.py`
 
 
 11. * Import necessary libraries
