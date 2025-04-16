@@ -2,10 +2,10 @@
 
 Run either:
 
-1. Through the `main.py` file
+1. Through `main.py`
 
 
-2. Through the `main_single_file.py` file
+2. Through `main_single_file.py`
 
 
 3. Through a python console, instantiate `DiscordBot()` on its own from `bots/discordbots.py` 
