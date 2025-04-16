@@ -21,7 +21,8 @@ class MentorCog(commands.Cog, name="Mentor"):
         # Try to get a reference to General cog so we can dm user a list of subjects
         general_cog = self.bot.get_cog("General")
         try:
-            await general_cog.dm(ctx, message)
+            # Send DM to user
+            await ctx.author.send(message)
             self.logger.info(message)
         except Exception as e:
             self.logger.error(f"General Cog not found: {e}")
