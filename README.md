@@ -230,7 +230,7 @@ class DiscordBot(commands.Bot):
 
 6. * Set up init method in `DiscordBot()` to store important variables.  
    * We pass cogs as an optional string argument that can hold an indefinite amount of names we can use to attach cogs
-   * We then configure the intents and other default config info to pass to the \_\_init__ method of the parent class
+   * We then configure the intents and other default config info to pass to the `__init__` method of the parent class
    * After we run the init method of the Bot parent class, we use Bots built-in `run()` method to start it up
 ```
 def __init__(self, *cogs):
@@ -283,7 +283,7 @@ import asyncio
 9. * Now, lets create our `GeneralCog()` class. 
     
         Not only do we inherit `commands.Cog`, we also need to pass a name argument for the bot
-   * Then we can set up our __init__ method, we are only passing the DiscordBot() class to the cog
+   * Then we can set up our `__init__` method, we are only passing the DiscordBot() class to the cog
 
 ```
 class GeneralCog(commands.Cog, name="General"):
@@ -307,7 +307,7 @@ class GeneralCog(commands.Cog, name="General"):
     * We can then use `ctx.typing()` to make it look like our bot is typing a reply
     * We sleep for half a second before our message sends
     * Then we can use our context `ctx.send()` to send our message
-    * You can also use `ctx.reply` to directly reply to the user
+    * Or you can use `ctx.reply()` to directly reply to the user
 
 
 ```
