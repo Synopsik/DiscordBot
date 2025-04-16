@@ -272,9 +272,9 @@ class DiscordBot(commands.Bot):
 7. Finally, we log our bot's name and ID to the console once it's ready
 
 ```
-    async def on_ready(self):
-        # Called when bot is up and running
-        print(f"Logged in as {self.user} (ID: {self.user.id})")
+        async def on_ready(self):
+            # Called when bot is up and running
+            print(f"Logged in as {self.user} (ID: {self.user.id})")
 ```
 
 ---
