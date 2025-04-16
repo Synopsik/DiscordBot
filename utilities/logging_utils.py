@@ -24,6 +24,7 @@ def setup_logging(
     else:
         logger = logging.getLogger()
 
+    # Set level of logs broadcasted (ex. logging.INFO in our level parameter)
     logger.setLevel(level)
 
     # Create and add our custom handler
@@ -33,7 +34,9 @@ def setup_logging(
         fmt="[%(asctime)s] [%(levelname)s] %(message)s",
         datefmt="%Y-%m-%d %H:%M:%S"
     )
+    # Set our formatter we made and attach it to our handler
     db_handler.setFormatter(formatter)
+    # Add handler to our logger
     logger.addHandler(db_handler)
 
     return logger
@@ -50,7 +53,8 @@ class DatabaseLogHandler(logging.Handler):
         super().__init__()
         self.db_pool = db_pool
         self.loop = loop
-        self.table_name = table_name
+        self.table_name = table_name # Unsure if I'll need this once db is configured, maybe just hardcode
+
 
     def emit(self, record: logging.LogRecord) -> None:
         """
@@ -79,6 +83,7 @@ class DatabaseLogHandler(logging.Handler):
             self.handleError(record)
         """
 
+
     async def _write_log_to_db(self, log_time: datetime, logger_name: str, level: str, message: str):
         """
         An async helper method for writing a single log entry to the database.
@@ -95,5 +100,3 @@ class DatabaseLogHandler(logging.Handler):
             level,
             message
         )
-
-
