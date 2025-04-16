@@ -2,17 +2,17 @@
 
 Run either
 
-1. Through the main.py file
+1. Through the `main.py` file
 
 Or
 
-2. Through the main_simple.py file
+2. Through the `main_single_file.py` file
 
 Or    
 
 3. Through a python console, 
 
-    instantiate DiscordBot() on its own from bots/discordbots.py 
+    instantiate `DiscordBot()` on its own from `bots/discordbots.py` 
     
     or store into a var `bot = DiscordBot()`
 
@@ -20,7 +20,7 @@ Or
 
 Instructions to run a Discord bot from a single file
 
-Example file: main_simple.py
+Example file: `main_single_file.py`
 
 ### Get Discord Token
 
@@ -34,7 +34,7 @@ Example file: main_simple.py
 
 ### Setup Project
 
-4. Create a new project directory ..\Projects\DiscordBot\
+4. Create a new project directory `..\Projects\DiscordBot\`
 
 
 5. * Shift+Right Click inside the new folder 
@@ -58,7 +58,7 @@ Example file: main_simple.py
 > 
 > python-dotenv is used to interact with .env files
 
-9. Create environment file through text editor, save as all files and name it .env
+9. Create environment file through text editor, save as all files and name it `.env`
 ```
 # example .env file
 BOT_TOKEN="TOKEN_EXAMPLE_CODE"
@@ -66,11 +66,11 @@ BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 
 ### Develop Project
 
-10. Create project file ..\Projects\DiscordBot\main_simple.py
+10. Create project file `..\Projects\DiscordBot\main_single_file.py`
 
 
 11. * Import necessary libraries
-    * After importing the function load_dotenv() we need to call it
+    * After importing the function `load_dotenv()` we need to call it
     * os is used to access our .env variables with dotenv
 ```
 import discord
@@ -131,7 +131,7 @@ async def on_message(message):
 client.run(token)
 ```
 
-See `main_simple.py` for the entire file
+See `main_single_file.py` for the entire file
 
 ## Advanced Bot Instructions
 
@@ -141,7 +141,7 @@ A cog is a class that inherits `from discord.ext import commands` using `(comman
 
 For example, we can have a bot connected to multiple Discord servers. Based on the name of the server, or some other determining factor, after the bot init's it is able to load specific cogs. One server could have general, games, mentor while another server could have general, music, agent.
 
-Example file: main.py
+Example file: `main.py`
 
 ---
 
@@ -168,7 +168,7 @@ DiscordBot
     │   ├── database_utils.py # Functions specific to interacting with external database
     │   └── logging_utils.py # Implements the Logging class and methods that store logs in database
     ├── *main.py # Use this to start up our Advanced Bot
-    ├── main_simple.py # Previous Simple Bot example
+    ├── main_single_file.py # Previous Simple Bot example
     └── .env # Stores important keys that we want hidden from version control
 ```
 > [!Note]
