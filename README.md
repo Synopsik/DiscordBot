@@ -16,7 +16,7 @@ Run either:
 
 ---
 
-## Simple Bot Instructions
+# Simple Bot Instructions
 
 Instructions to run a Discord bot from a single file
 
@@ -24,7 +24,7 @@ Example file: `main_single_file.py`
 
 ---
 
-### Get Discord Token
+## Setup Discord
 
 1. Login to Discord and create a private server
 
@@ -36,7 +36,7 @@ Example file: `main_single_file.py`
 
 ---
 
-### Setup Project
+## Setup Project
 
 4. Create a new project directory `..\Projects\DiscordBot\`
 
@@ -79,7 +79,7 @@ BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 
 ---
 
-### Develop Project
+## Develop Project
 
 
 
@@ -160,7 +160,7 @@ See `main_single_file.py` for the entire file
 
 ---
 
-## Advanced Bot Instructions
+# Advanced Bot Instructions
 
 Instead of running everything from a single file that that can get messy and confusing, we break our program up into meaningful classes that have their dedicated jobs, or **cogs**.
 
@@ -172,7 +172,7 @@ Example file: `main.py`
 
 ---
 
-### Setup Project
+## Setup Project
 
 1. If not already completed, finish **Get Discord Token** steps, and **Setup Project** instructions steps from Simple Bot
 
@@ -195,11 +195,11 @@ DiscordBot
 
 ---
 
-### Develop Project
+## Develop Project
 
 ---
 
-#### main.py
+### main.py
 
 The main file used to run our program
 
@@ -219,7 +219,7 @@ if __name__ == "__main__":
 
 ---
 
-#### discordbot.py
+### discordbot.py
 
 This file contains the DiscordBot class that we make instances from
 
@@ -300,7 +300,7 @@ class DiscordBot(commands.Bot):
 
 ---
 
-#### general.py
+### general.py
 
 Our general cog file, all of its functionality is attached to our DiscordBot
 
