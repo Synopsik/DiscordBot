@@ -306,7 +306,7 @@ class DiscordBot(commands.Bot):
 Our general cog file, we can attach all of its functionality to our DiscordBot
 
 9. * For `general.py` we need to import the essentials to create a cog class. 
-   * Optionally, we will also need asyncio for a timer in our ping command
+   * Optionally, we will also need asyncio for a timer on our ping command
 
 ```
 import discord
