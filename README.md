@@ -8,7 +8,9 @@ Run either:
 2. Through `main_single_file.py`
 
 
-3. Through a python console, instantiate `DiscordBot()` on its own from `bots/discordbots.py` 
+3. Through a python console, 
+
+    instantiate `DiscordBot()` on its own from `bots/discordbots.py` 
     
     or store into a var `bot = DiscordBot()`
 
@@ -288,7 +290,7 @@ class DiscordBot(commands.Bot):
 
 
 
-11. Finally, we log our bot's name and ID to the console once it's ready
+8. Finally, we log our bot's name and ID to the console once it's ready
 
 ```
 
@@ -304,7 +306,7 @@ class DiscordBot(commands.Bot):
 
 Our general cog file, all of its functionality is attached to our DiscordBot
 
-8. * For `general.py` we need to import the essentials to create a cog class. 
+9. * For `general.py` we need to import the essentials to create a cog class. 
    * Optionally, we will also need asyncio for a timer in our ping command
 
 ```
@@ -314,7 +316,7 @@ import asyncio
 
 ```
 
-9. * Now, lets create our `GeneralCog()` class. 
+10. * Now, lets create our `GeneralCog()` class. 
     
         Not only do we inherit `commands.Cog`, we also need to pass a name argument for the bot
    * Then we can set up our `__init__` method, we are only passing the DiscordBot() class to the cog
@@ -327,7 +329,7 @@ class GeneralCog(commands.Cog, name="General"):
 
 ```
 
-10. * Just like in our SimpleBot, we need to use decorators to listen for specific events
+11. * Just like in our SimpleBot, we need to use decorators to listen for specific events
     * In this example, we are just printing to console when our cog is loaded
 
 ```
@@ -338,7 +340,7 @@ class GeneralCog(commands.Cog, name="General"):
 
 ```
 
-11. * Finally, lets set up our ping command
+12. * Finally, lets set up our ping command
     * We use the name parameter to name our command,
 
         the prefix configured in discordbot.py `self.prefix = "!"` is how we will call it
