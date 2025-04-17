@@ -223,10 +223,12 @@ if __name__ == "__main__":
 This file contains the DiscordBot class that we make instances from
 
 4. * Import the same libraries as our SimpleBot
-   * Additionally, we use `commands` so that our class can inherit directly from `commands.Bot`
+   * Additionally, we use `commands` so that our class can inherit directly from `commands.Bot` 
+   and `os` to pull our .env variable
 ```
 from cogs.general import GeneralCog
 
+import os
 import discord
 from discord.ext import commands
 from dotenv import load_dotenv
@@ -244,13 +246,7 @@ class DiscordBot(commands.Bot):
    * After we run the init method of the Bot parent class, we use Bots built-in `run()` method to start it up
 ```
     def __init__(self, *cogs):
-        # Configure cogs
-        for cog in cogs:
-            match cog:
-                case "general":
-                    await self.add_cog(GeneralCog(self))
-                case _:
-                    print("No cogs found")
+        self.cogs = cogs
         
         # Configure intents
         intents = discord.Intents.default()
@@ -269,7 +265,24 @@ class DiscordBot(commands.Bot):
         
         self.run(os.getenv("BOT_TOKEN")) # Run bot
 ```
-7. Finally, we log our bot's name and ID to the console once it's ready
+
+7. Now that we have initialized our bot, we can use the async method `setup_hook()` to call the inherited `self.add_cog()`
+    method 
+```
+    async def setup_hook(self):
+        # Configure cogs
+        for cog in self.cogs:
+            match cog:
+                case "general":
+                    await self.add_cog(GeneralCog(self))
+                case _:
+                    print("No cogs found")
+        
+```
+
+
+
+11. Finally, we log our bot's name and ID to the console once it's ready
 
 ```
         async def on_ready(self):
