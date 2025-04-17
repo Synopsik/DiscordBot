@@ -337,6 +337,7 @@ class GeneralCog(commands.Cog, name="General"):
         await ctx.typing() # Imitate typing for half a second
         await asyncio.sleep(0.5)
         await ctx.send(f"Pong! {round(self.bot.latency * 1000)}ms") # Then send message
+        print(f"[COMMAND] {ctx.message.author} sent command {ctx.message.content}")
 ```
 
 ---

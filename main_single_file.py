@@ -32,8 +32,8 @@ async def on_message(message):
     # Begin case statement to search for bot commands
     match message.content:
         case "!ping":
-            print(f"[COMMAND] {message.author} sent command {message.content}")
             await message.channel.send("Pong!")
+            print(f"[COMMAND] {message.author} sent command {message.content}")
             # To reply directly we can do this instead
             # await message.channel.reply("Pong!")
         case _:
