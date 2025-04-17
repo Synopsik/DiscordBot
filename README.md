@@ -162,7 +162,7 @@ See `main_single_file.py` for the entire file
 
 # Advanced Bot Instructions
 
-Instead of running everything from a single file that that can get messy and confusing, we break our program up into meaningful classes that have their dedicated jobs, or **cogs**.
+Instead of running everything from a single file that can get messy and confusing, we break our program up into meaningful classes that have their dedicated jobs, or **cogs**.
 
 A cog is a class that inherits the `commands.Cog` class `from discord.ext import commands`. When creating our class we also need to include a name parameter, this will look like `CogClass(commands.Cog, name="CogName")`. Inside this class, we have overridable methods that have a context parameter that can be used to pull information from the message received, the message author, and more context information. Using cogs we can separate logic into interchangeable pieces that can be loaded and unloaded as needed.
 
