@@ -175,17 +175,9 @@ DiscordBot
     │   └── *discordbot.py # Instantiate this class to start the bot
     ├── *cogs
     │   ├── *__init__.py
-    │   ├── agent.py # Agent cog for AI activities
-    │   ├── games.py # Fun games for users to interact with
-    │   ├── *general.py # Regular commands that are needed across every bot
-    │   ├── logging.py # Logs every interaction the bot registers
-    │   └── mentor.py # Connects user to a mentor interface to ask specific questions
-    ├─ utilities
-    │   ├── __init__.py
-    │   ├── database_utils.py # Functions specific to interacting with external database
-    │   └── logging_utils.py # Implements the Logging class and methods that store logs in database
+    │   └── *general.py # Regular commands that are needed across every bot
     ├── *main.py # Use this to start up our Advanced Bot
-    ├── main_single_file.py # Previous Simple Bot example
+    ├──  main_single_file.py # Previous Simple Bot example
     └── .env # Stores important keys that we want hidden from version control
 ```
 > [!Note]
@@ -233,11 +225,13 @@ import discord
 from discord.ext import commands
 from dotenv import load_dotenv
 load_dotenv()
+
 ```
 
 5. Create our Discord bot class, using our inherited `commands.Bot` as the Parent class
 ```
 class DiscordBot(commands.Bot):
+
 ```
 
 6. * Set up init method in `DiscordBot()` to store important variables.  
@@ -246,7 +240,7 @@ class DiscordBot(commands.Bot):
    * After we run the init method of the Bot parent class, we use Bots built-in `run()` method to start it up
 ```
     def __init__(self, *cogs):
-        self.cogs = cogs
+        self.cogs_list = cogs
         
         # Configure intents
         intents = discord.Intents.default()
@@ -264,6 +258,7 @@ class DiscordBot(commands.Bot):
                          description=description)
         
         self.run(os.getenv("BOT_TOKEN")) # Run bot
+
 ```
 
 7. Now that we have initialized our bot, we can use the async method `setup_hook()` to call the inherited `self.add_cog()`
@@ -271,13 +266,13 @@ class DiscordBot(commands.Bot):
 ```
     async def setup_hook(self):
         # Configure cogs
-        for cog in self.cogs:
+        for cog in self.cogs_list:
             match cog:
                 case "general":
                     await self.add_cog(GeneralCog(self))
                 case _:
                     print("No cogs found")
-        
+
 ```
 
 
@@ -285,9 +280,10 @@ class DiscordBot(commands.Bot):
 11. Finally, we log our bot's name and ID to the console once it's ready
 
 ```
-        async def on_ready(self):
-            # Called when bot is up and running
-            print(f"Logged in as {self.user} (ID: {self.user.id})")
+    async def on_ready(self):
+        # Called when bot is up and running
+        print(f"Logged in as {self.user} (ID: {self.user.id})")
+
 ```
 
 ---
