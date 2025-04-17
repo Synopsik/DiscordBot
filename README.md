@@ -317,8 +317,9 @@ import asyncio
 
 10. * Now, lets create our `GeneralCog()` class. 
     
-        Not only do we inherit `commands.Cog`, we also need to pass a name argument for the cog
-   * Then we can set up our `__init__` method, we are only passing the DiscordBot() class to the cog
+    * Not only do we inherit `commands.Cog`, we also need to pass a name argument for the cog
+
+     * Then we can set up our `__init__` method, we are only passing the DiscordBot() class to the cog
 
 ```
 
