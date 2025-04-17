@@ -362,7 +362,7 @@ class GeneralCog(commands.Cog, name="General"):
 
 Congratulations on making it all the way through!
     
-You now have a simple bot that can reply to you with a message and its latency
+You now have a Discord bot that can reply to you with a message and its latency
 
 There are many other command examples in this repo 
     
