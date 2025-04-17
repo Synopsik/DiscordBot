@@ -248,7 +248,7 @@ class DiscordBot(commands.Bot):
 6. * Set up init method in `DiscordBot()` to store important variables.  
    * We pass cogs as an optional string argument that can hold an indefinite amount of names we can use to attach cogs
    * We then configure the intents and other default config info to pass to the `__init__` method of the parent class
-   * After we run the init method of the Bot parent class, we use Bots built-in `run()` method to start it up
+   * At the end of the init method, we use Bots built-in `run()` method to start our bot up
 ```
     def __init__(self, *cogs):
         self.cogs_list = cogs
