@@ -207,7 +207,7 @@ The main file used to run our program
 
     * all we are doing is importing the `DiscordBot()` class (that we haven't created yet)
     
-    * then instantiate DiscordBot with the string parameters we want attached to the bot as cogs
+    * then create DiscordBot using a string parameters for the cogs we want attached
 
 ```
 from bots.discordbot import DiscordBot
