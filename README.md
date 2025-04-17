@@ -89,11 +89,13 @@ import discord
 import os
 from dotenv import load_dotenv
 load_dotenv()
+
 ```
 
 12. * Create an intents object configuration file and set the permissions for channels you need
     * Then you can instantiate your bot
 ```
+
 intents = discord.Intents.default()
 intents.presences = True # Allows the bot to view user presence (e.g., online/offline status)
 intents.members = True # Lets the bot access member-related data (e.g., when users join or leave the server)
@@ -101,15 +103,18 @@ intents.message_content = True # Gives the bot access to read message content, s
 
 # Create client bot instance
 client = discord.Client(intents=intents)
+
 ```
 
 13. Store token information from environment variable
 ```
+
 # Setup token from environment,
 token = os.getenv("BOT_TOKEN")
 
 # Alternatively this can just be hardcoded
 # token = "t0k3n...akljS2"
+
 ```
 
 14. * Create an override function `on_message(message)` with the decorator `@client.event`
@@ -118,16 +123,19 @@ token = os.getenv("BOT_TOKEN")
 
         [this link](https://gist.github.com/Synopsik/cfdacaf1140111cd1acc101b0c1ca968) shows a simple example
 ```
+
 @client.event
 async def on_message(message):
     # If the message the bot is viewing was written by the bot,
     # break out of function on_message
     if message.author == client.user:
         return
+
 ```
 
 * We validated that the message did not originate from our bot, then we can use a case match statement to look for simple commands and process messages
 ```
+
     # Begin case statement to search for bot commands
     match message.content:
         case "!ping":
@@ -138,10 +146,12 @@ async def on_message(message):
         case _:
             # Default case, print to console
             print(f"[MESSAGE] {message.author}: {message.content}")
+
 ```
 
 15. Finally, the most important step we need to do is run our bot
 ```
+
 # Run our bot once it is configured
 client.run(token)
 ```
@@ -204,7 +214,6 @@ from bots.discordbot import DiscordBot
 
 if __name__ == "__main__":
     DiscordBot("general")
-
 ```
 
 
@@ -230,6 +239,7 @@ load_dotenv()
 
 5. Create our Discord bot class, using our inherited `commands.Bot` as the Parent class
 ```
+
 class DiscordBot(commands.Bot):
 
 ```
@@ -264,6 +274,7 @@ class DiscordBot(commands.Bot):
 7. Now that we have initialized our bot, we can use the async method `setup_hook()` to call the inherited `self.add_cog()`
     method 
 ```
+
     async def setup_hook(self):
         # Configure cogs
         for cog in self.cogs_list:
@@ -280,6 +291,7 @@ class DiscordBot(commands.Bot):
 11. Finally, we log our bot's name and ID to the console once it's ready
 
 ```
+
     async def on_ready(self):
         # Called when bot is up and running
         print(f"Logged in as {self.user} (ID: {self.user.id})")
@@ -299,6 +311,7 @@ Our general cog file, all of its functionality is attached to our DiscordBot
 import discord
 from discord.ext import commands
 import asyncio
+
 ```
 
 9. * Now, lets create our `GeneralCog()` class. 
@@ -307,18 +320,22 @@ import asyncio
    * Then we can set up our `__init__` method, we are only passing the DiscordBot() class to the cog
 
 ```
+
 class GeneralCog(commands.Cog, name="General"):
     def __init__(self, bot):
         self.bot = bot
+
 ```
 
 10. * Just like in our SimpleBot, we need to use decorators to listen for specific events
     * In this example, we are just printing to console when our cog is loaded
 
 ```
+
     @commands.Cog.listener()
     async def on_ready(self):
         print("Loaded General Cog")
+
 ```
 
 11. * Finally, lets set up our ping command
@@ -332,6 +349,7 @@ class GeneralCog(commands.Cog, name="General"):
 
 
 ```
+
     @commands.command(name="ping")
     async def ping(self, ctx):
         await ctx.typing() # Imitate typing for half a second
