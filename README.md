@@ -75,12 +75,12 @@ Example file: `main_single_file.py`
 ```
 BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 ```
+10. Repoen the New Text Document you had to use to make the .env file and now create our project file `..\Projects\DiscordBot\main_single_file.py`
 
 ---
 
 ### Develop Project
 
-10. Repoen the New Text Document you had to use to make the .env file and now create our project file `..\Projects\DiscordBot\main_single_file.py`
 
 
 11. * Import necessary libraries
