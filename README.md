@@ -224,8 +224,9 @@ if __name__ == "__main__":
 This file contains the DiscordBot class that we make instances from
 
 4. * Import the same libraries as our SimpleBot
-   * Additionally, we use `commands` so that our class can inherit directly from `commands.Bot` 
-   and `os` to pull our .env variable
+   * Additionally, we import `GeneralCog`
+   * As well as `commands` so that our class can inherit directly from `commands.Bot`
+     
 ```
 from cogs.general import GeneralCog
 
