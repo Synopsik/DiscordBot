@@ -14,7 +14,7 @@ Run either:
     
     or store into a var `bot = DiscordBot()`
 
----
+
 
 # Simple Bot Instructions
 
@@ -22,7 +22,7 @@ Instructions to run a Discord bot from a single file
 
 Example file: `main_single_file.py`
 
----
+
 
 ## Setup Discord
 
@@ -34,7 +34,7 @@ Example file: `main_single_file.py`
 
 3. Invite it to your server
 
----
+
 
 ## Setup Project
 
@@ -77,7 +77,7 @@ BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 ```
 10. Repoen the New Text Document you had to use to make the .env file and now create our project file `..\Projects\DiscordBot\main_single_file.py`
 
----
+
 
 ## Develop Project
 
@@ -158,7 +158,7 @@ client.run(token)
 
 See `main_single_file.py` for the entire file
 
----
+
 
 # Advanced Bot Instructions
 
@@ -170,7 +170,7 @@ Using OOP principles, we can create multiple instances from a single bot class t
 
 Example file: `main.py`
 
----
+
 
 ## Setup Project
 
@@ -193,11 +193,11 @@ DiscordBot
 > [!Note]
 > For now, only files and folders with a `*` prefix need to be created
 
----
+
 
 ## Develop Project
 
----
+
 
 ### main.py
 
@@ -217,7 +217,7 @@ if __name__ == "__main__":
 ```
 
 
----
+
 
 ### discordbot.py
 
@@ -298,7 +298,7 @@ class DiscordBot(commands.Bot):
 
 ```
 
----
+
 
 ### general.py
 
@@ -358,7 +358,7 @@ class GeneralCog(commands.Cog, name="General"):
         print(f"[COMMAND] {ctx.message.author} sent command {ctx.message.content}")
 ```
 
----
+
 
 Congratulations on making it all the way through!
     
