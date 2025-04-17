@@ -26,7 +26,7 @@ Example file: `main_single_file.py`
 
 ## Setup Discord
 
-1. Login to Discord and create a private server
+1. Login to Discord and create a server
 
 
 2. Follow [this link](https://discordpy.readthedocs.io/en/stable/discord.html) to create a bot account and get your token
