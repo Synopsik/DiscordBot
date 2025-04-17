@@ -83,9 +83,7 @@ BOT_TOKEN="TOKEN_EXAMPLE_CODE"
 
 
 
-11. * Import necessary libraries
-    * After importing the function `load_dotenv()` we need to call it
-    * os is used to access our .env variables with dotenv
+11. Import necessary libraries
 ```
 import discord
 import os
@@ -94,7 +92,7 @@ load_dotenv()
 
 ```
 
-12. * Create an intents object configuration file and set the permissions for channels you need
+12. * Create an intent object configuration file and set the permissions for channels you need
     * Then you can instantiate your bot
 ```
 
