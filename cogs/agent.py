@@ -20,12 +20,19 @@ class AgentCog(commands.Cog, name="Agent"):
             query_text = " ".join(query)
             # Show typing indicator while processing
             async with ctx.typing():
-                response = await ask(self.logger, query_text)
+                response = await ask(query_text, self.logger)
                 if response:
-                    await ctx.send(response["response"])
+                    if isinstance(response, dict):
+                        if "response" in response:
+                            await ctx.send(response["response"])
+                        elif "error" in response:
+                            await ctx.send(f"Error: {response['error']}")
+                        else:
+                            await ctx.send(str(response))
+                    else:
+                        await ctx.send(str(response))
                 else:
                     await ctx.send("Sorry, I didn't get a response from the API.")
-
         except Exception as e:
             self.logger.error(f"Error querying: {e}")
             await ctx.send(f"An error occurred: {str(e)}")
