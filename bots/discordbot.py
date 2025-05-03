@@ -14,10 +14,18 @@ from cogs.general import GeneralCog
 from cogs.logging import LoggingCog
 from cogs.mentor import MentorCog
 from cogs.admin import AdminCog
+from cogs.agent import AgentCog
 
 
 def start_bot():
-    DiscordBot("general", "games", "logging", "mentor", "admin")
+    DiscordBot(
+        "general",
+        "games",
+        "logging",
+        "mentor",
+        "admin",
+        "agent"
+    )
 
 
 class DiscordBot(commands.Bot):
@@ -84,6 +92,8 @@ class DiscordBot(commands.Bot):
                     await self.add_cog(MentorCog(self, self.logger))
                 case "admin":
                     await self.add_cog(AdminCog(self, self.logger))
+                case "agent":
+                    await self.add_cog(AgentCog(self, self.logger))
                 case _:
                     # Default case: if no names matches, no cog is added
                     self.logger.error(f"Cog {cog} not found.")
