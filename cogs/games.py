@@ -10,12 +10,15 @@ class GamesCog(commands.Cog, name="Games"):
     @commands.Cog.listener()
     async def on_ready(self):
         self.logger.debug("Loaded Games Cog")
+
+
     @commands.command(name="coinflip")
     @commands.cooldown(1, 5, commands.BucketType.user)
     async def coinflip(self, ctx):
         result = random.choice(["Heads", "Tails"])
         await ctx.send(f"The coin landed on **{result}**")
         self.logger.info(f"The coin landed on {result}")
+
 
     @commands.command(name="rps")
     async def rps(self, ctx, choice: str):
