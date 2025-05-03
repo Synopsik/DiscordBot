@@ -22,7 +22,7 @@ class AgentCog(commands.Cog, name="Agent"):
             async with ctx.typing():
                 response = await ask(self.logger, query_text)
                 if response:
-                    await ctx.send(f"Response: {response}")
+                    await ctx.send(response["response"])
                 else:
                     await ctx.send("Sorry, I didn't get a response from the API.")
 
