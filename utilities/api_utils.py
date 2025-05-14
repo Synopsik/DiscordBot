@@ -1,7 +1,10 @@
 import aiohttp
-import ujson
+import os
+from dotenv import load_dotenv
+load_dotenv()
 
-BASE_URL = "http://100.69.131.125:8000"
+
+BASE_URL = os.getenv("API_URL")
 ENDPOINT = "/ask/"
 
 
