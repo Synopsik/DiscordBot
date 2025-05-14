@@ -20,7 +20,7 @@ class AgentCog(commands.Cog, name="Agent"):
             query_text = " ".join(query)
             # Show typing indicator while processing
             async with ctx.typing():
-                response = await ask(query_text, self.logger)
+                response = await ask(query_text, self.logger, show_thoughts=False)
                 if response:
                     if isinstance(response, dict):
                         if "response" in response:
@@ -36,3 +36,4 @@ class AgentCog(commands.Cog, name="Agent"):
         except Exception as e:
             self.logger.error(f"Error querying: {e}")
             await ctx.send(f"An error occurred: {str(e)}")
+
